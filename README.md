@@ -26,11 +26,16 @@ The program supports the following commands and flags:
 
 - `encrypt` - Encrypt a file for an Estonian ID card holder
 
-### Flags
+### Required Flags
 
-- `-h, --help` - Show help message
 - `--id` - Estonian ID code of the recipient
 - `--input-file` - Path to the file to be encrypted
+
+### Optional Flags
+
+- `-h, --help` - Show help message and exit
+- `-V, --version` - Print version information and exit
+- `--verbose` - Enable verbose logging
 
 ### Examples
 
@@ -39,9 +44,19 @@ Show help:
 java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar --help
 ```
 
+Show command-specific help:
+```bash
+java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --help
+```
+
 Encrypt a file:
 ```bash
 java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --id <Estonian-ID-Code> --input-file <path-to-file>
+```
+
+Encrypt with verbose logging:
+```bash
+java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --id <Estonian-ID-Code> --input-file <path-to-file> --verbose
 ```
 
 The encrypted file will be created as `<Estonian-ID-Code>.cdoc` in the current directory.
