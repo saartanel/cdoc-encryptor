@@ -134,7 +134,7 @@ public class SimpleCDOCEncryptor {
         System.out.println("  Show this help:");
         System.out.println("    java -jar cdoc-encryptor.jar --help\n");
         System.out.println("  Encrypt a file:");
-        System.out.println("    java -jar cdoc-encryptor.jar encrypt --id <PERSONAL_ID_CODE> --input-file ./document.txt");
+        System.out.println("    java -jar cdoc-encryptor.jar encrypt --id <Estonian-ID-Code> --input-file ./document.txt");
     }
 
     private static X509Certificate fetchCertificateFromLDAP(String idCode) throws Exception {

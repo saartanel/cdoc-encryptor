@@ -20,9 +20,28 @@ This will create an executable JAR with all dependencies included.
 
 ## Usage
 
-Run the program:
+The program supports the following commands and flags:
+
+### Commands
+
+- `encrypt` - Encrypt a file for an Estonian ID card holder
+
+### Flags
+
+- `-h, --help` - Show help message
+- `--id` - Estonian ID code of the recipient
+- `--input-file` - Path to the file to be encrypted
+
+### Examples
+
+Show help:
 ```bash
-java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar <Estonian-ID-Code> <path-to-file>
+java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar --help
+```
+
+Encrypt a file:
+```bash
+java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --id <Estonian-ID-Code> --input-file <path-to-file>
 ```
 
 The encrypted file will be created as `<Estonian-ID-Code>.cdoc` in the current directory.
