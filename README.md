@@ -27,11 +27,35 @@ java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar <Estonian-ID-Code>
 
 The encrypted file will be created as `<Estonian-ID-Code>.cdoc` in the current directory.
 
-## Libraries Used
+## Technical Details
 
-- cdoc4j 1.5
-- Bouncy Castle 1.76
-- Logback 1.4.11
+### SK LDAP Service
+
+The program uses SK ID Solutions' LDAP service to fetch encryption certificates:
+- LDAP URL: `ldaps://esteid.ldap.sk.ee`
+- Base DN: `c=EE`
+- Search filter: `(&(objectClass=person)(serialNumber=PNOEE-{idcode}))`
+- Required attribute: `userCertificate;binary`
+
+### CDOC Format
+
+CDOC is an encrypted container format for secure file transfer. This program:
+- Creates CDOC v1.1 containers (XML-based format)
+- Uses recipients' public key certificates for encryption
+- Implements AES-256-GCM for data encryption
+- Uses ECDH for key transport
+
+### Libraries Used
+
+- cdoc4j 1.5 - CDOC container creation library
+- Bouncy Castle 1.76 - Cryptographic operations
+- Logback 1.4.11 - Logging framework
+
+## References
+
+- [SK LDAP Documentation](https://github.com/SK-EID/LDAP/wiki/Knowledge-Base)
+- [CDOC4j Examples](https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it)
+- [CDOC4j Source](https://github.com/open-eid/cdoc4j)
 
 ## License
 
