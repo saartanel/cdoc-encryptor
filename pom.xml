@@ -20,8 +20,8 @@
         
         <!-- Dependency versions -->
         <cdoc4j.version>1.5</cdoc4j.version>
-        <bouncy-castle.version>1.77</bouncy-castle.version>
-        <logback.version>1.4.14</logback.version>
+        <bouncy-castle.version>1.78</bouncy-castle.version>
+        <logback.version>1.5.13</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
         <picocli.version>4.7.5</picocli.version>
         <junit.version>5.10.1</junit.version>
