@@ -21,7 +21,13 @@ A command-line Java application for encrypting files using Estonian ID card cert
 
 ## Quick Start
 
-### 1. Build the Application
+### 1. Download or build the jar
+
+You can find the latest .jar under [releases](https://github.com/saartanel/cdoc-encryptor/releases).
+
+Or
+
+You can build it youself:
 
 ```bash
 git clone <repository-url>
@@ -29,12 +35,12 @@ cd cdoc-encryptor
 mvn clean package
 ```
 
-This creates an executable JAR: `target/cdoc-encryptor-1.0-shaded.jar`
+This creates an executable JAR: `target/cdoc-encryptor-1.0-jar-with-dependencies.jar`
 
 ### 2. Encrypt a File
 
 ```bash
-java -jar target/cdoc-encryptor-1.0-shaded.jar encrypt \
+java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
   --id <Estonian-ID-Code> \
   --input-file document.pdf
 ```
@@ -46,7 +52,7 @@ The encrypted file will be saved as `<Estonian-ID-Code>.cdoc` in the current dir
 ### Command Structure
 
 ```bash
-java -jar cdoc-encryptor-1.0-shaded.jar encrypt [OPTIONS]
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt [OPTIONS]
 ```
 
 ### Required Options
@@ -70,12 +76,12 @@ java -jar cdoc-encryptor-1.0-shaded.jar encrypt [OPTIONS]
 
 **Basic encryption:**
 ```bash
-java -jar cdoc-encryptor-1.0-shaded.jar encrypt --id <Estonian-ID-Code> -i contract.pdf
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --id <Estonian-ID-Code> -i contract.pdf
 ```
 
 **With custom output file:**
 ```bash
-java -jar cdoc-encryptor-1.0-shaded.jar encrypt \
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
   --id <Estonian-ID-Code> \
   --input-file contract.pdf \
   --output-file encrypted-contract.cdoc
@@ -83,7 +89,7 @@ java -jar cdoc-encryptor-1.0-shaded.jar encrypt \
 
 **Verbose output for troubleshooting:**
 ```bash
-java -jar cdoc-encryptor-1.0-shaded.jar encrypt \
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
   --id <Estonian-ID-Code> \
   -i document.pdf \
   --verbose
@@ -91,8 +97,8 @@ java -jar cdoc-encryptor-1.0-shaded.jar encrypt \
 
 **Show help:**
 ```bash
-java -jar cdoc-encryptor-1.0-shaded.jar --help
-java -jar cdoc-encryptor-1.0-shaded.jar encrypt --help
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar --help
+java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --help
 ```
 
 ## How It Works
@@ -199,9 +205,9 @@ mvn clean package
 
 ### Build Outputs
 
-The build creates two JARs:
+The build creates a JAR:
 - `cdoc-encryptor-1.0.jar` - Basic JAR (requires classpath)
-- `cdoc-encryptor-1.0-shaded.jar` - **Recommended** - All dependencies included
+- `cdoc-encryptor-1.0-jar-with-dependencies.jar` - **Recommended** - All dependencies included
 
 ## Contributing
 
