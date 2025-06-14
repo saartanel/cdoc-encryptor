@@ -103,7 +103,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'rootfs'
-        scan-ref: 'target/cdoc-encryptor-*-jar-with-dependencies.jar'
+        scan-ref: 'target/cdoc-encryptor-${{ needs.build.outputs.version }}-jar-with-dependencies.jar'
         format: 'table'
         severity: 'HIGH,CRITICAL'
         exit-code: '0'
@@ -112,7 +112,7 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'rootfs'
-        scan-ref: 'target/cdoc-encryptor-*-jar-with-dependencies.jar'
+        scan-ref: 'target/cdoc-encryptor-${{ needs.build.outputs.version }}-jar-with-dependencies.jar'
         format: 'sarif'
         output: 'trivy-jar-results.sarif'
         
