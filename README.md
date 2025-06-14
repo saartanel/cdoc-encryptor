@@ -15,62 +15,41 @@ A command-line Java application for encrypting files using Estonian ID card cert
 ## Prerequisites
 
 - **Java 17 or newer** (Java 11+ may work but not tested)
-- **Maven 3.6 or newer** (for building)
+- **Maven 3.6 or newer** (for building from source)
 - **Internet connection** (for certificate lookup via LDAP)
 - **Valid Estonian ID code** of the recipient
 
-## Quick Start
+## Installation
 
-### 1. Download or build the jar
+### Option 1: Download Pre-built JAR
+Download the latest `.jar` from [releases](https://github.com/saartanel/cdoc-encryptor/releases).
 
-You can find the latest .jar under [releases](https://github.com/saartanel/cdoc-encryptor/releases).
-
-Or
-
-You can build it youself:
-
+### Option 2: Build from Source
 ```bash
 git clone <repository-url>
 cd cdoc-encryptor
 mvn clean package
 ```
 
-This creates an executable JAR: `target/cdoc-encryptor-1.0-jar-with-dependencies.jar`
+This creates: `target/cdoc-encryptor-1.0-jar-with-dependencies.jar`
 
-### 2. Encrypt a File
+## Usage
 
-```bash
-java -jar target/cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
-  --id <Estonian-ID-Code> \
-  --input-file document.pdf
-```
-
-The encrypted file will be saved as `<Estonian-ID-Code>.cdoc` in the current directory.
-
-## Usage Reference
-
-### Command Structure
-
+### Basic Command Structure
 ```bash
 java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt [OPTIONS]
 ```
 
-### Required Options
+### Required Parameters
+- `--id <Estonian-ID-Code>` - 11-digit Estonian ID code
+- `--input-file <path>` or `-i <path>` - File to encrypt
 
-| Option | Description | Example |
-|--------|-------------|---------|
-| `--id` | Estonian ID code (11 digits) | `--id <Estonian-ID-Code>` |
-| `--input-file`, `-i` | Path to file to encrypt | `-i document.pdf` |
-
-### Optional Options
-
-| Option | Description |
-|--------|-------------|
-| `--output-file`, `-o` | Custom output path (default: auto-generated) |
-| `--verbose`, `-v` | Enable detailed logging |
-| `--skip-cert-validation` | Skip certificate validation (not recommended) |
-| `--help`, `-h` | Show help message |
-| `--version`, `-V` | Show version information |
+### Optional Parameters
+- `--output-file <path>` or `-o <path>` - Custom output path (default: auto-generated)
+- `--verbose` or `-v` - Enable detailed logging
+- `--skip-cert-validation` - Skip certificate validation (not recommended)
+- `--help` or `-h` - Show help message
+- `--version` or `-V` - Show version information
 
 ### Examples
 
@@ -79,7 +58,7 @@ java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt [OPTIONS]
 java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --id <Estonian-ID-Code> -i contract.pdf
 ```
 
-**With custom output file:**
+**Custom output file:**
 ```bash
 java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
   --id <Estonian-ID-Code> \
@@ -90,60 +69,27 @@ java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
 **Verbose output for troubleshooting:**
 ```bash
 java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt \
-  --id <Estonian-ID-Code> \
-  -i document.pdf \
-  --verbose
-```
-
-**Show help:**
-```bash
-java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar --help
-java -jar cdoc-encryptor-1.0-jar-with-dependencies.jar encrypt --help
+  --id <Estonian-ID-Code> -i document.pdf --verbose
 ```
 
 ## How It Works
 
-### Certificate Lookup Process
+The tool follows this process:
 
-1. **ID Validation**: Validates Estonian ID format and checksum
-2. **LDAP Query**: Searches SK's LDAP service for certificates
-3. **Certificate Selection**: Chooses authentication certificate for encryption
-4. **Validation**: Checks certificate validity and expiration
-5. **Encryption**: Creates CDOC container with AES-256-GCM encryption
+1. **ID Validation** - Validates Estonian ID format and checksum
+2. **Certificate Lookup** - Searches SK's LDAP service for the person's certificates
+3. **Certificate Selection** - Automatically selects the authentication certificate
+4. **Validation** - Checks certificate validity and warns about expiration
+5. **Encryption** - Creates a CDOC container with AES-256-GCM encryption
 
-### Estonian ID Card Certificates
-
-Estonian ID cards contain two certificates:
-- **Authentication certificate**: Used for encryption (this tool uses this one)
-- **Signing certificate**: Used for digital signatures
-
-The tool automatically selects the appropriate certificate for CDOC encryption.
-
-## Technical Details
-
-### LDAP Configuration
-- **Server**: `ldaps://esteid.ldap.sk.ee`
-- **Base DN**: `c=EE`
-- **Search Filter**: `(&(objectClass=person)(serialNumber=PNOEE-{idcode}))`
-- **Timeout**: 10 seconds for connection and read operations
-
-### CDOC Format
-- **Version**: CDOC 1.1 (XML-based)
-- **Encryption**: AES-256-GCM for data encryption
-- **Key Transport**: ECDH (Elliptic Curve Diffie-Hellman)
-- **Container**: ZIP-based with XML metadata
-
-### File Size Limits
-- **Warning threshold**: Files over 100MB show performance warning
-- **No hard limit**: Tool can handle large files (memory permitting)
+The encrypted file is saved as `<Estonian-ID-Code>.cdoc` (or your custom filename).
 
 ## Troubleshooting
 
 ### Common Issues
 
 **"Invalid Estonian ID format"**
-- Ensure ID is exactly 11 digits
-- Check that checksum is correct
+- Ensure ID is exactly 11 digits with correct checksum
 
 **"Could not retrieve encryption certificate"**
 - Verify the person has a valid Estonian ID card
@@ -151,20 +97,35 @@ The tool automatically selects the appropriate certificate for CDOC encryption.
 - Try with `--verbose` flag for detailed error information
 
 **"Certificate has expired"**
-- The person's ID card certificate has expired
-- They need to renew their ID card or certificate
+- The person's ID card certificate has expired and needs renewal
 
 **"Certificate expires in X days"**
-- Warning that certificate expires soon
-- Encryption will work but recipient should renew certificate
+- Warning that certificate expires soon (encryption still works)
 
-### Verbose Logging
+### Getting More Information
 
 Use the `--verbose` flag to see detailed information about:
 - LDAP search process
 - Certificate discovery and validation
 - Encryption progress
 - Error details and stack traces
+
+## Technical Details
+
+### LDAP Configuration
+- **Server**: `ldaps://esteid.ldap.sk.ee`
+- **Search**: Finds certificates by Estonian ID code
+- **Timeout**: 10 seconds for connection and read operations
+
+### CDOC Format
+- **Version**: CDOC 1.1 (XML-based container)
+- **Encryption**: AES-256-GCM for data encryption
+- **Key Transport**: ECDH (Elliptic Curve Diffie-Hellman)
+- **Structure**: ZIP-based with XML metadata
+
+### File Handling
+- **Warning**: Files over 100MB show performance warning
+- **No hard limit**: Can handle large files (memory permitting)
 
 ## Dependencies
 
@@ -174,14 +135,13 @@ Use the `--verbose` flag to see detailed information about:
 | Bouncy Castle | 1.77 | Cryptographic operations |
 | PicoCLI | 4.7.5 | Command-line interface |
 | Logback | 1.4.14 | Logging framework |
-| SLF4J | 2.0.9 | Logging API |
 
-## Security Considerations
+## Security
 
-- **Certificate Validation**: Certificates are validated by default (can be disabled for testing)
-- **Network Security**: Uses LDAPS (LDAP over TLS) for certificate lookup
-- **No Private Keys**: Tool only handles public certificates, never private keys
-- **Memory Safety**: Sensitive data cleared from memory after use
+- **Certificate Validation**: Certificates validated by default
+- **Network Security**: Uses LDAPS (LDAP over TLS)
+- **No Private Keys**: Only handles public certificates
+- **Memory Safety**: Sensitive data cleared after use
 
 ## Building from Source
 
@@ -189,8 +149,7 @@ Use the `--verbose` flag to see detailed information about:
 - Java 17+ JDK
 - Maven 3.6+
 
-### Build Commands
-
+### Commands
 ```bash
 # Clean build
 mvn clean compile
@@ -200,22 +159,11 @@ mvn test
 
 # Create executable JAR
 mvn clean package
-
 ```
 
 ### Build Outputs
-
-The build creates a JAR:
 - `cdoc-encryptor-1.0.jar` - Basic JAR (requires classpath)
-- `cdoc-encryptor-1.0-jar-with-dependencies.jar` - **Recommended** - All dependencies included
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+- `cdoc-encryptor-1.0-jar-with-dependencies.jar` - **Recommended** (all dependencies included)
 
 ## References
 
@@ -223,13 +171,6 @@ The build creates a JAR:
 - [CDOC Format Specification](https://github.com/open-eid/cdoc4j/wiki)
 - [Estonian ID Card Technical Specification](https://www.id.ee/en/article/for-developers/)
 - [cdoc4j Library Examples](https://github.com/open-eid/cdoc4j/wiki/Examples-of-how-to-use-it)
-
-## Support
-
-For issues and questions:
-- Check the troubleshooting section above
-- Review verbose output with `--verbose` flag
-- Open an issue on the project repository
 
 ## License
 
