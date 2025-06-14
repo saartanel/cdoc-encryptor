@@ -105,13 +105,19 @@ jobs:
     - name: Verify SARIF Files
       run: ls -la trivy-pom-results.sarif trivy-jar-results.sarif
       
-    - name: Upload Trivy scan results to GitHub Security tab
+    - name: Upload POM scan results to GitHub Security tab
       uses: github/codeql-action/upload-sarif@v3
       if: always()
       with:
-        sarif_file: |
-          trivy-pom-results.sarif
-          trivy-jar-results.sarif
+        sarif_file: trivy-pom-results.sarif
+        category: dependencies
+        
+    - name: Upload JAR scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: trivy-jar-results.sarif
+        category: jar-files
         
   release:
     runs-on: ubuntu-latest
