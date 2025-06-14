@@ -63,7 +63,7 @@ jobs:
         name: build-artifacts
         path: |
           cdoc-encryptor-${{ steps.get_version.outputs.version }}-jar-with-dependencies.jar
-          target/cdoc-encryptor-*-jar-with-dependencies.jar
+          target/
           pom.xml
         retention-days: 1
 
@@ -82,11 +82,16 @@ jobs:
       with:
         name: build-artifacts
         
+    - name: List downloaded files (debug)
+      run: |
+        echo "Files in current directory:"
+        find . -type f -name "*.jar" -o -name "pom.xml"
+        
     - name: Scan dependencies (pom.xml)
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'fs'
-        scan-ref: 'pom.xml'
+        scan-ref: './pom.xml'
         format: 'table'
         severity: 'HIGH,CRITICAL'
         exit-code: '0'
@@ -95,15 +100,15 @@ jobs:
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'fs'
-        scan-ref: 'pom.xml'
+        scan-ref: './pom.xml'
         format: 'sarif'
         output: 'trivy-pom-results.sarif'
         
     - name: Scan JAR file
       uses: aquasecurity/trivy-action@master
       with:
-        scan-type: 'rootfs'
-        scan-ref: 'target/cdoc-encryptor-${{ needs.build.outputs.version }}-jar-with-dependencies.jar'
+        scan-type: 'fs'
+        scan-ref: './target/'
         format: 'table'
         severity: 'HIGH,CRITICAL'
         exit-code: '0'
@@ -111,8 +116,8 @@ jobs:
     - name: Generate JAR SARIF report
       uses: aquasecurity/trivy-action@master
       with:
-        scan-type: 'rootfs'
-        scan-ref: 'target/cdoc-encryptor-${{ needs.build.outputs.version }}-jar-with-dependencies.jar'
+        scan-type: 'fs'
+        scan-ref: './target/'
         format: 'sarif'
         output: 'trivy-jar-results.sarif'
         
