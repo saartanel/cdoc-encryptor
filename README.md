@@ -19,20 +19,6 @@ A command-line Java application for encrypting files using Estonian ID card cert
 - **Internet connection** (for certificate lookup via LDAP)
 - **Valid Estonian ID code** of the recipient
 
-## Installation
-
-### Option 1: Download Pre-built JAR
-Download the latest `.jar` from [releases](https://github.com/saartanel/cdoc-encryptor/releases).
-
-### Option 2: Build from Source
-```bash
-git clone <repository-url>
-cd cdoc-encryptor
-mvn clean package
-```
-
-This creates: `target/cdoc-encryptor-1.0-jar-with-dependencies.jar`
-
 ## Usage
 
 ### Basic Command Structure
@@ -162,8 +148,8 @@ mvn clean package
 ```
 
 ### Build Outputs
-- `cdoc-encryptor-1.0.jar` - Basic JAR (requires classpath)
-- `cdoc-encryptor-1.0-jar-with-dependencies.jar` - **Recommended** (all dependencies included)
+- `target/cdoc-encryptor-1.0.jar` - Basic JAR (requires classpath)
+- `target/cdoc-encryptor-1.0-jar-with-dependencies.jar` - **Recommended** (all dependencies included)
 
 ## References
 
