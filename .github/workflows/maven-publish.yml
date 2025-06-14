@@ -52,7 +52,7 @@ jobs:
     - name: Rename JAR with version
       run: |
         VERSION="${{ steps.get_version.outputs.version }}"
-        cp target/cdoc-encryptor-*-shaded.jar cdoc-encryptor-${VERSION}.jar
+        cp target/cdoc-encryptor-*-jar-with-dependencies.jar  cdoc-encryptor-${VERSION}.jar
         ls -la *.jar
         
     - name: Upload JAR to release (if release event)
