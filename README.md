@@ -4,13 +4,13 @@ A command-line Java application for encrypting files using Estonian ID card cert
 
 ## Features
 
-- ✅ Encrypt files for any Estonian ID card holder
-- ✅ Automatic certificate lookup via SK LDAP service
-- ✅ CDOC 1.1 container format support
-- ✅ Estonian ID code validation with checksum verification
-- ✅ Certificate validation and expiry warnings
-- ✅ Large file handling with progress indication
-- ✅ Verbose logging for troubleshooting
+- Encrypt files for any Estonian ID card holder
+- Automatic certificate lookup via SK LDAP service
+- CDOC 1.1 container format support
+- Estonian ID code validation with checksum verification
+- Certificate validation and expiry warnings
+- Large file handling with progress indication
+- Verbose logging for troubleshooting
 
 ## Prerequisites
 
